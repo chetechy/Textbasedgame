@@ -1,0 +1,86 @@
+#7-3 Project Two Submission
+#LaNise Essick
+#8/13/2021
+
+# Define dictionary
+rooms = {
+    'The Manor': {'South': 'Gotham City', 'North': 'London', 'East': 'Tomb of Nabu', 'West': 'Israel'},
+    'Tomb of Nabu': {'West': 'The Manor', 'item': 'Helmet'},
+    'London': {'South': 'The Manor', 'item': 'Grimoire'},
+    'Israel': {'East': 'The Manor', 'item': 'Cloak'},
+    'Gotham City': {'East': 'Tartarus', 'North': 'The Manor', 'item': 'Spear'},
+    'Tartarus': {'West': 'Gotham City', 'item': 'Trigon'}
+}
+
+# start player in Great Hall
+room = 'The Manor'
+# Function for getting location
+def get_new_room(room, direction):
+    # Set new location
+    new_room = room
+    # Loop and if valid direction
+    # assign new room
+    for i in rooms:
+        if i == room:
+            if direction in rooms[room]:
+                new_room = rooms[room][direction]
+    # Return new location
+    return new_room
+
+def get_item(room):
+    if 'item' in rooms[room]:  # if statement
+        return rooms[room]['item']  # return statement
+    else:
+        return 'This room has no item!'  # return statement
+
+def instructions():
+   # Output main menu and instructions
+   print('Text Adventure Game\n'
+         '---------------------------------------\n'
+         'You will be playing as John Constantine! A known sorcerer and magician.\n'
+         'You are on the hunt to defeat the demon, Trigon!\n'
+         'You must collect all of the items to defeat him!\n'
+         'To move: South, North, East, West\n'
+         'To get items: get 'item name')
+# call instructions function
+instructions()
+# set blank inventory
+inventory = []
+
+# Start gameplay loop
+while True:
+    # Output current position and inventory
+    print('----------------------------------')
+    print('You are in', room)
+    print('Inventory:', inventory)
+    item = get_item(room)
+    print('You found:', item)
+    # Prompt user to enter direction
+    direction = input("Enter a move: ")
+    # Capitalize first letter
+    direction = direction.capitalize()
+    print('You chose:', direction)
+
+    # Initialize loop to check for valid movement between rooms
+    if direction == 'East' or direction == 'West' or direction == 'North' or direction == 'South':
+        new_room = get_new_room(room, direction)
+        # If invalid direction, prompt for new direction
+        if new_room == room:
+            print('There is no portal in that direction, please enter a new move!')
+            # if valid direction change room
+        else:
+            room = new_room
+    elif direction == ('get' + rooms[room]['item']):
+         if rooms[room]['item'] in inventory:
+             print('You have already retrieved this item!! Pick another move!')
+         elif rooms[room]['item'] == 'Trigon' and len(inventory) != 4:
+              print("You did not gather all you needed, Trigon! has defeated you!")
+              exit(0)
+         elif rooms[room]['item'] == 'Trigon' and len(inventory) == 4:
+               print("Congratulations! You have defeated Trigon, another job well done Mr. Constantine!")
+               exit(0)
+         else:
+            inventory.append(rooms[room]['item'])
+        # If invalid command, prompt user to enter new direction
+    else:
+        print('Invalid entry! Please enter a valid move.')
